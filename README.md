@@ -2,7 +2,6 @@
 
 > Free, privacy-first Markdown → PDF and HTML converter. Runs entirely in the browser — no login, no limits, your document never leaves your device.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mzeeshanaltaf/markdown2pdf)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
 ![License](https://img.shields.io/badge/license-MIT-green)

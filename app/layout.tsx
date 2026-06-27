@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s · Markdown2PDF",
   },
   description:
-    "Convert Markdown to PDF or HTML right in your browser. GitHub Flavored Markdown, LaTeX math, Mermaid diagrams, and syntax highlighting. Free, unlimited, no sign-up — your document never leaves your device.",
+    "Free, private Markdown to PDF & HTML converter with LaTeX math, Mermaid diagrams, and syntax highlighting — all in your browser, nothing uploaded.",
   keywords: [
     "markdown to pdf",
     "markdown to html",

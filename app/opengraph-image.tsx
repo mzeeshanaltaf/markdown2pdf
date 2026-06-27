@@ -77,6 +77,24 @@ export default function OpengraphImage() {
           Free, unlimited, and private. Math, diagrams, and code — converted on
           your device and never uploaded.
         </div>
+
+        <div style={{ display: "flex", marginTop: "48px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px",
+              background: "#10b981",
+              color: "#022c22",
+              fontSize: "30px",
+              fontWeight: 600,
+              padding: "16px 36px",
+              borderRadius: "12px",
+            }}
+          >
+            Convert your Markdown free →
+          </div>
+        </div>
       </div>
     ),
     { ...size }
