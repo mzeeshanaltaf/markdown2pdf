@@ -12,13 +12,10 @@ export function Footer() {
         </div>
 
         <nav className="flex items-center gap-6">
-          <a href="#features" className="transition-colors hover:text-zinc-200">
+          <a href="/#features" className="transition-colors hover:text-zinc-200">
             Features
           </a>
-          <a href="#privacy" className="transition-colors hover:text-zinc-200">
-            Privacy
-          </a>
-          <a href="#faq" className="transition-colors hover:text-zinc-200">
+          <a href="/#faq" className="transition-colors hover:text-zinc-200">
             FAQ
           </a>
           <Link href="/contact" className="transition-colors hover:text-zinc-200">
@@ -32,7 +29,17 @@ export function Footer() {
           </Link>
         </nav>
 
-        <p>Built for people who care about privacy.</p>
+        <p>
+          Developed with 💖 by{" "}
+          <a
+            href="https://www.zeeshanai.cloud"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-zinc-300 transition-colors hover:text-zinc-100"
+          >
+            Zeeshan Altaf
+          </a>
+        </p>
       </div>
     </footer>
   );

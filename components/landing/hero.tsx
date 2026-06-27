@@ -43,7 +43,7 @@ export function Hero() {
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <a
-              href="#how"
+              href="/#how"
               className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-5 py-3 text-sm font-medium text-zinc-200 transition-colors hover:bg-white/5"
             >
               How it works
