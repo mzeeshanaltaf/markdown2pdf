@@ -35,7 +35,7 @@ Open DevTools → Network while you convert and download. You will see zero requ
 - **PDF** — [Paged.js](https://pagedjs.org/) paginates your document in the browser, then `window.print()` hands it to the browser's own Save-as-PDF. Vector output, selectable text, crisp math and diagrams — all on-device.
 - **HTML** — All CSS (typography, syntax theme, KaTeX via MathML), and pre-rendered Mermaid SVGs are inlined into a single `Blob`. One-click download, no print dialog, fully offline.
 
-The only telemetry is [Vercel Web Analytics](https://vercel.com/docs/analytics/privacy-policy) — cookie-free, no personal data, no cross-site tracking. It records aggregate page views, never the content you convert. See the [Privacy Policy](https://markdown2pdf.app/privacy) for the full breakdown.
+The only telemetry is [Vercel Web Analytics](https://vercel.com/docs/analytics/privacy-policy) — cookie-free, no personal data, no cross-site tracking. It records aggregate page views, never the content you convert. See the [Privacy Policy](https://markdown2pdf.zeeshanai.cloud/privacy) for the full breakdown.
 
 ## Getting Started
 
@@ -75,10 +75,13 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or go 
 ```
 app/
   page.tsx          # Landing page
-  app/page.tsx      # Converter route (ssr: false wrapper)
+  app/page.tsx      # Converter route (server metadata + ssr: false shell)
   contact/page.tsx  # Contact / feedback page (server component)
   privacy/page.tsx  # Privacy policy (static)
   api/contact/      # Route handler: validate → honeypot → rate limit → n8n webhook
+  robots.ts         # /robots.txt (allow all + sitemap pointer)
+  sitemap.ts        # /sitemap.xml (all routes)
+  opengraph-image.tsx   # Generated 1200×630 OG/Twitter card (next/og)
   icon.svg          # Brand "M" favicon
   globals.css       # Tailwind base + print isolation CSS
 
@@ -86,9 +89,11 @@ components/
   converter/        # Editor, preview, toolbar, PDF options
   landing/          # Hero, features, privacy, how-it-works, FAQ, footer
   contact/          # Progressive-enhancement contact form
+  structured-data.tsx   # JSON-LD: WebApplication + WebSite + FAQPage
   ui/               # shadcn/Base UI primitives
 
 lib/
+  site.ts           # Canonical SITE_URL (from NEXT_PUBLIC_SITE_URL)
   styles/           # Shared Markdown CSS (preview + PDF + HTML export)
   pdf/              # Paged.js orchestration + @page CSS builder
   html/             # Standalone HTML export (Blob download)
@@ -114,6 +119,14 @@ UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis REST token
 ```
 
 If the Upstash variables are absent, rate limiting fails open (submissions are still allowed); if the n8n variables are absent, the form returns a configuration error.
+
+One optional variable controls the canonical domain used for metadata, canonical tags, `sitemap.xml`, `robots.txt`, and JSON-LD:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://markdown2pdf.zeeshanai.cloud  # no trailing slash
+```
+
+If unset, it falls back to the production domain. See [`.env.example`](.env.example) for the full list.
 
 ## Architecture Notes
 

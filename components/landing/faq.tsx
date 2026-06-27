@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Reveal } from "./reveal";
 
-const FAQS = [
+export const FAQS = [
   {
     q: "Is it really free?",
     a: "Yes. There is no paid tier, no account, and no conversion limit. The app runs entirely in your browser, so there is nothing for us to meter.",

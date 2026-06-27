@@ -1,20 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import { ConverterShell } from "@/components/converter/converter-shell";
 
-import dynamic from "next/dynamic";
-import { Loader2 } from "lucide-react";
-
-// The converter relies on browser-only APIs (CodeMirror, Mermaid, Paged.js,
-// localStorage). Rendering it on the server would cause a hydration mismatch
-// and silently dead UI, so we skip SSR for this subtree entirely.
-const Converter = dynamic(() => import("@/components/converter/converter"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-[100dvh] items-center justify-center">
-      <Loader2 className="size-6 animate-spin text-muted-foreground" />
-    </div>
-  ),
-});
+export const metadata: Metadata = {
+  title: "Markdown to PDF Converter",
+  description:
+    "Open the free Markdown to PDF & HTML converter. Write or paste Markdown with GitHub Flavored Markdown, LaTeX math, Mermaid diagrams, and syntax highlighting — everything runs in your browser, nothing is uploaded.",
+  alternates: {
+    canonical: "/app",
+  },
+};
 
 export default function AppPage() {
-  return <Converter />;
+  return <ConverterShell />;
 }

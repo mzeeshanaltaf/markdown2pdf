@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Contact & Feedback",
   description:
     "Share feedback, report a bug, or suggest a feature for Markdown2PDF.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 const ERROR_MESSAGES: Record<string, string> = {

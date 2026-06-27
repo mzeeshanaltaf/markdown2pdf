@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { SITE_URL } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,10 +15,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://markdown2pdf.app";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Markdown to PDF — Free, Private, No Login",
     template: "%s · Markdown2PDF",
@@ -37,7 +36,7 @@ export const metadata: Metadata = {
     title: "Markdown to PDF — Free, Private, No Login",
     description:
       "Convert Markdown to PDF or HTML in your browser. GFM, LaTeX math, Mermaid diagrams. Free, unlimited, nothing uploaded.",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "Markdown2PDF",
     type: "website",
   },

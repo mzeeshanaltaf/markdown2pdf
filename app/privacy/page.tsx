@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "How Markdown2PDF handles your data: your documents never leave your browser, and we collect as little as possible.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 const LAST_UPDATED = "June 27, 2026";
