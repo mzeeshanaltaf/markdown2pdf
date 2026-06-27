@@ -107,8 +107,10 @@ export async function generatePdf(
   // Print on the next frame so the paginated DOM is fully laid out, then tidy up.
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
+  let fallbackTimer = 0;
   const done = () => {
     window.removeEventListener("afterprint", done);
+    window.clearTimeout(fallbackTimer);
     cleanup();
   };
   window.addEventListener("afterprint", done);
@@ -116,5 +118,5 @@ export async function generatePdf(
   window.print();
 
   // Fallback cleanup if afterprint never fires (some browsers/headless).
-  window.setTimeout(done, 60_000);
+  fallbackTimer = window.setTimeout(done, 60_000);
 }

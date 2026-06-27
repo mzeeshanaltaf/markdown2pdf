@@ -35,10 +35,13 @@ const MARGIN_MM: Record<Exclude<MarginPreset, "custom">, number> = {
   wide: 30,
 };
 
+/** Upper bound on a custom margin; beyond this the content box collapses. */
+export const MAX_CUSTOM_MARGIN_MM = 60;
+
 export function marginMm(o: PdfOptions): number {
-  return o.marginPreset === "custom"
-    ? Math.max(0, o.customMarginMm)
-    : MARGIN_MM[o.marginPreset];
+  if (o.marginPreset !== "custom") return MARGIN_MM[o.marginPreset];
+  const mm = Number.isFinite(o.customMarginMm) ? o.customMarginMm : 0;
+  return Math.min(MAX_CUSTOM_MARGIN_MM, Math.max(0, mm));
 }
 
 /** Escape a string for safe use inside a CSS `content: "…"` value. */
@@ -68,14 +71,4 @@ export function buildPrintCss(o: PdfOptions): string {
   ${boxes.join("\n  ")}
 }
 `;
-}
-
-const SIZE_LABEL: Record<PageSize, string> = {
-  A4: "A4",
-  Letter: "Letter",
-  Legal: "Legal",
-};
-
-export function describeOptions(o: PdfOptions): string {
-  return `${SIZE_LABEL[o.pageSize]} · ${o.orientation} · ${marginMm(o)}mm margins`;
 }

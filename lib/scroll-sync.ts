@@ -86,13 +86,28 @@ export function createScrollSync(view: EditorView, preview: HTMLElement) {
 
   editorScroller.addEventListener("scroll", onEditorScroll, { passive: true });
   preview.addEventListener("scroll", onPreviewScroll, { passive: true });
-  editorScroller.addEventListener("pointerenter", setEditorActive);
-  preview.addEventListener("pointerenter", setPreviewActive);
+
+  // Mark the pane that initiated scrolling so it drives the other without a
+  // feedback loop. Cover every input route, not just the mouse pointer:
+  // `pointerenter`/`wheel` for mouse + touch, `focusin` for keyboard scrolling
+  // inside the editor (PageDown etc.).
+  const editorActivators = ["pointerenter", "wheel", "focusin"] as const;
+  editorActivators.forEach((t) =>
+    editorScroller.addEventListener(t, setEditorActive, { passive: true })
+  );
+  const previewActivators = ["pointerenter", "wheel"] as const;
+  previewActivators.forEach((t) =>
+    preview.addEventListener(t, setPreviewActive, { passive: true })
+  );
 
   return () => {
     editorScroller.removeEventListener("scroll", onEditorScroll);
     preview.removeEventListener("scroll", onPreviewScroll);
-    editorScroller.removeEventListener("pointerenter", setEditorActive);
-    preview.removeEventListener("pointerenter", setPreviewActive);
+    editorActivators.forEach((t) =>
+      editorScroller.removeEventListener(t, setEditorActive)
+    );
+    previewActivators.forEach((t) =>
+      preview.removeEventListener(t, setPreviewActive)
+    );
   };
 }

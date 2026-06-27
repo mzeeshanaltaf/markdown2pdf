@@ -31,11 +31,14 @@ body { margin: 0; background: #fff; }
 @media (max-width: 720px) { .markdown-body { padding: 32px 18px 64px; } }
 `;
 
-function escapeHtml(s: string): string {
+/** Escape a string for safe interpolation into HTML text or an attribute. */
+function escapeHtmlText(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /** Build a complete, dependency-free HTML document string. */
@@ -51,7 +54,7 @@ export function buildStandaloneHtml(
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="generator" content="Markdown2PDF — converted locally in the browser">
-<title>${escapeHtml(title)}</title>
+<title>${escapeHtmlText(title)}</title>
 <style>${css}</style>
 </head>
 <body>

@@ -22,6 +22,7 @@ import {
   type PageSize,
   type Orientation,
   type MarginPreset,
+  MAX_CUSTOM_MARGIN_MM,
 } from "@/lib/pdf/print-styles";
 
 export function PdfOptionsPopover({
@@ -105,11 +106,16 @@ export function PdfOptionsPopover({
                 <Input
                   type="number"
                   min={0}
-                  max={60}
+                  max={MAX_CUSTOM_MARGIN_MM}
+                  step={1}
                   value={options.customMarginMm}
-                  onChange={(e) =>
-                    set("customMarginMm", Number(e.target.value) || 0)
-                  }
+                  onChange={(e) => {
+                    const n = Number(e.target.value);
+                    const clamped = Number.isFinite(n)
+                      ? Math.min(MAX_CUSTOM_MARGIN_MM, Math.max(0, n))
+                      : 0;
+                    set("customMarginMm", clamped);
+                  }}
                   aria-label="Custom margin in millimeters"
                   className="h-8 w-16"
                 />

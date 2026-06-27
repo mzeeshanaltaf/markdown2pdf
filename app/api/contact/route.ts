@@ -12,8 +12,7 @@ type Fields = {
 };
 
 async function parseBody(req: NextRequest): Promise<Fields> {
-  const ct = req.headers.get("content-type") ?? "";
-  if (ct.includes("application/x-www-form-urlencoded") || ct.includes("multipart/form-data")) {
+  if (isFormSubmission(req)) {
     const fd = await req.formData();
     return {
       name: ((fd.get("name") as string | null) ?? "").trim(),
@@ -33,14 +32,24 @@ async function parseBody(req: NextRequest): Promise<Fields> {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// On Vercel `x-forwarded-for` is set by the platform edge and is trustworthy
+// as a rate-limit key. Behind a different/looser proxy it would be spoofable;
+// revisit if this is ever deployed elsewhere.
 function clientIp(req: NextRequest): string {
   const fwd = req.headers.get("x-forwarded-for");
   if (fwd) return fwd.split(",")[0].trim();
   return req.headers.get("x-real-ip") ?? "anonymous";
 }
 
+function isFormSubmission(req: NextRequest): boolean {
+  const ct = req.headers.get("content-type") ?? "";
+  return ct.includes("application/x-www-form-urlencoded") || ct.includes("multipart/form-data");
+}
+
 export async function POST(req: NextRequest) {
-  const isFormPost = (req.headers.get("content-type") ?? "").includes("urlencoded");
+  // Mirror parseBody's content-type detection so a no-JS form POST always gets
+  // a redirect response (not JSON), regardless of urlencoded vs multipart.
+  const isFormPost = isFormSubmission(req);
 
   const ok = (code = "1") =>
     isFormPost

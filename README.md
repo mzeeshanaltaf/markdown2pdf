@@ -61,7 +61,7 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or go 
 - **Framework:** Next.js 16 (App Router) + TypeScript
 - **Styling:** Tailwind CSS v4 + shadcn/ui (Base UI / base-nova)
 - **Editor:** CodeMirror 6 via `@uiw/react-codemirror`
-- **Markdown:** `react-markdown` + `remark-gfm` + `remark-math` / `rehype-katex` + `rehype-highlight`
+- **Markdown:** `react-markdown` + `remark-gfm` + `remark-math` / `rehype-katex` + `rehype-highlight` + `rehype-sanitize`
 - **Diagrams:** Mermaid.js
 - **PDF:** Paged.js + `window.print()`
 - **Animations:** Motion (`motion/react`)

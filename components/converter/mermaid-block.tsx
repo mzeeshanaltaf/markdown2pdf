@@ -37,6 +37,11 @@ export function MermaidBlock({ chart }: { chart: string }) {
       .render(`mmd-${reactId}`, code)
       .then(({ svg, bindFunctions }) => {
         if (cancelled || !containerRef.current) return;
+        // Assigning rendered SVG via innerHTML is only safe because Mermaid is
+        // initialized with `securityLevel: "strict"` (see ensureMermaid), which
+        // strips scripts and click handlers from the diagram. Do not relax that
+        // setting without sanitizing here — this SVG is also serialized into the
+        // PDF and the standalone HTML export.
         containerRef.current.innerHTML = svg;
         bindFunctions?.(containerRef.current);
         setError(null);

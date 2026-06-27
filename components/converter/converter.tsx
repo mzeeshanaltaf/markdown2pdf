@@ -2,7 +2,7 @@
 
 import "katex/dist/katex.min.css";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { EditorView } from "@codemirror/view";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
@@ -43,7 +43,7 @@ export default function Converter() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const viewRef = useRef<EditorView | null>(null);
+  const [view, setView] = useState<EditorView | null>(null);
 
   // Persist the scoped Markdown + syntax-theme CSS into the page so the live
   // preview matches the PDF and HTML exports exactly.
@@ -57,17 +57,14 @@ export default function Converter() {
 
   useEffect(() => saveSyntaxTheme(syntaxTheme), [syntaxTheme]);
 
-  // Wire up bi-directional scroll sync once the editor view exists.
-  const [viewReady, setViewReady] = useState(false);
+  // Wire up bi-directional scroll sync once the editor view exists. Keying on
+  // the view object itself re-establishes sync if the editor is ever recreated.
   useEffect(() => {
-    if (!viewReady || !viewRef.current || !scrollRef.current) return;
-    return createScrollSync(viewRef.current, scrollRef.current);
-  }, [viewReady]);
+    if (!view || !scrollRef.current) return;
+    return createScrollSync(view, scrollRef.current);
+  }, [view]);
 
-  const onViewReady = useCallback((view: EditorView) => {
-    viewRef.current = view;
-    setViewReady(true);
-  }, []);
+  const onViewReady = useCallback((v: EditorView) => setView(v), []);
 
   const handleUpload = useCallback((file: File) => {
     file
@@ -91,7 +88,7 @@ export default function Converter() {
     clearDraft();
   }, []);
 
-  const title = deriveTitle(source, fileTitle);
+  const title = useMemo(() => deriveTitle(source, fileTitle), [source, fileTitle]);
 
   const handleDownloadPdf = useCallback(async () => {
     if (!bodyRef.current || !source.trim()) {
@@ -109,6 +106,7 @@ export default function Converter() {
   }, [source, syntaxTheme, pdfOptions]);
 
   const handleDownloadHtml = useCallback(() => {
+    if (exporting) return;
     if (!bodyRef.current || !source.trim()) {
       toast.error("Nothing to export yet");
       return;
@@ -119,7 +117,7 @@ export default function Converter() {
     } catch {
       toast.error("HTML export failed. Please try again.");
     }
-  }, [source, syntaxTheme, title]);
+  }, [exporting, source, syntaxTheme, title]);
 
   return (
     <div className="flex h-[100dvh] flex-col">

@@ -6,17 +6,24 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeHighlight from "rehype-highlight";
+import rehypeSanitize from "rehype-sanitize";
 import { rehypeSourceLine } from "@/lib/markdown/source-line";
+import { markdownSanitizeSchema } from "@/lib/markdown/sanitize-schema";
 import { MermaidBlock } from "./mermaid-block";
 
 const remarkPlugins = [remarkGfm, remarkMath];
 // rehype-katex keeps its default `htmlAndMathml` output: the HTML powers the
 // pretty preview/PDF (KaTeX CSS is loaded in the app), and the MathML twin lets
 // the exported standalone HTML render math natively with no fonts.
+//
+// rehypeSanitize runs LAST: it must see (and is configured to preserve) the
+// markup the katex/highlight/source-line plugins emit, while still stripping
+// scripts, event handlers and dangerous URLs from the user's Markdown.
 const rehypePlugins = [
   rehypeKatex,
   [rehypeHighlight, { ignoreMissing: true, detect: false }],
   rehypeSourceLine,
+  [rehypeSanitize, markdownSanitizeSchema],
 ] as const;
 
 /** Flatten React children of a code block down to its raw text. */
