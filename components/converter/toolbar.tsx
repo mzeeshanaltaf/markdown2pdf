@@ -198,6 +198,7 @@ export function Toolbar(props: ToolbarProps) {
                 variant="ghost"
                 size="icon-sm"
                 aria-label="Contact & feedback"
+                nativeButton={false}
                 render={<Link href="/contact" />}
               />
             }
