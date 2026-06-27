@@ -55,6 +55,10 @@ export const MARKDOWN_CSS = `
 .markdown-body strong { font-weight: 600; }
 
 .markdown-body ul, .markdown-body ol { padding-left: 2em; }
+.markdown-body ul { list-style: disc; }
+.markdown-body ol { list-style: decimal; }
+.markdown-body ul ul { list-style: circle; }
+.markdown-body ul ul ul { list-style: square; }
 .markdown-body li + li { margin-top: 0.25em; }
 .markdown-body li > p { margin-top: 1em; }
 .markdown-body ul ul, .markdown-body ul ol,

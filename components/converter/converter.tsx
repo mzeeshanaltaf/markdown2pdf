@@ -4,6 +4,7 @@ import "katex/dist/katex.min.css";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { EditorView } from "@codemirror/view";
+import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
 import { Editor } from "./editor";
@@ -30,6 +31,7 @@ function deriveTitle(source: string, fallback: string): string {
 }
 
 export default function Converter() {
+  const { resolvedTheme } = useTheme();
   const [source, setSource] = useState<string>(() => loadDraft() ?? SAMPLE_MARKDOWN);
   const [syntaxTheme, setSyntaxTheme] = useState<string>(
     () => loadSyntaxTheme() ?? DEFAULT_THEME_ID
@@ -164,7 +166,7 @@ export default function Converter() {
             value={source}
             onChange={setSource}
             onViewReady={onViewReady}
-            dark
+            dark={resolvedTheme === "dark"}
           />
         </section>
 

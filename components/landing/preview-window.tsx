@@ -37,7 +37,14 @@ export function convert(md: string) {
 \`\`\``;
 
 export function PreviewWindow() {
-  const css = MARKDOWN_CSS + "\n" + scopedThemeCss("github-dark");
+  // The export CSS keeps code blocks on a single line (true WYSIWYG). In this
+  // narrow marketing visual that would clip the code and show a scrollbar, so
+  // wrap long lines for the hero preview only.
+  const css =
+    MARKDOWN_CSS +
+    "\n" +
+    scopedThemeCss("github-dark") +
+    "\n.hero-rendered pre code { white-space: pre-wrap; overflow-x: visible; word-break: break-word; }";
   return (
     <div className="overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-2xl shadow-emerald-500/5 ring-1 ring-white/5">
       <style dangerouslySetInnerHTML={{ __html: css }} />
@@ -59,7 +66,7 @@ export function PreviewWindow() {
         </pre>
         <div className="bg-white">
           <div
-            className="markdown-body p-5 text-[13px]"
+            className="hero-rendered markdown-body p-5 text-[13px]"
             dangerouslySetInnerHTML={{ __html: RENDERED }}
           />
         </div>

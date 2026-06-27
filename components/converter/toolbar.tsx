@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import {
   Upload,
@@ -57,6 +58,26 @@ export function Toolbar(props: ToolbarProps) {
 
   return (
     <div className="flex flex-wrap items-center gap-2 border-b bg-background/80 px-3 py-2 backdrop-blur">
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Link
+              href="/"
+              aria-label="Markdown2PDF home"
+              className="flex items-center gap-2 rounded-md font-semibold text-foreground transition-opacity hover:opacity-80"
+            />
+          }
+        >
+          <span className="flex size-7 items-center justify-center rounded-md bg-emerald-500/15 font-mono text-sm text-emerald-500">
+            M
+          </span>
+          <span className="hidden sm:inline">Markdown2PDF</span>
+        </TooltipTrigger>
+        <TooltipContent>Back to home</TooltipContent>
+      </Tooltip>
+
+      <Separator orientation="vertical" className="mx-1 hidden h-6 sm:block" />
+
       <input
         ref={fileInputRef}
         type="file"
@@ -79,10 +100,24 @@ export function Toolbar(props: ToolbarProps) {
         <span className="hidden sm:inline">Upload</span>
       </Button>
 
-      <Button variant="ghost" size="sm" className="gap-2" onClick={props.onLoadSample}>
-        <FileText className="size-4" />
-        <span className="hidden sm:inline">Sample</span>
-      </Button>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={props.onLoadSample}
+            />
+          }
+        >
+          <FileText className="size-4" />
+          <span className="hidden sm:inline">Sample</span>
+        </TooltipTrigger>
+        <TooltipContent>
+          Load a sample document showcasing the supported Markdown features
+        </TooltipContent>
+      </Tooltip>
 
       <Tooltip>
         <TooltipTrigger
@@ -102,24 +137,32 @@ export function Toolbar(props: ToolbarProps) {
 
       <Separator orientation="vertical" className="mx-1 hidden h-6 sm:block" />
 
-      <div className="hidden items-center gap-2 md:flex">
-        <Palette className="size-4 text-muted-foreground" />
-        <Select
-          value={props.syntaxTheme}
-          onValueChange={(v) => v && props.onSyntaxThemeChange(v)}
+      <Tooltip>
+        <TooltipTrigger
+          render={<div className="hidden items-center gap-2 md:flex" />}
         >
-          <SelectTrigger size="sm" className="w-[150px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {HIGHLIGHT_THEMES.map((t) => (
-              <SelectItem key={t.id} value={t.id}>
-                {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <Palette className="size-4 text-muted-foreground" />
+          <Select
+            value={props.syntaxTheme}
+            onValueChange={(v) => v && props.onSyntaxThemeChange(v)}
+          >
+            <SelectTrigger size="sm" className="w-[150px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {HIGHLIGHT_THEMES.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  {t.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </TooltipTrigger>
+        <TooltipContent>
+          Syntax-highlighting theme for fenced code blocks (no effect if the
+          document has no code)
+        </TooltipContent>
+      </Tooltip>
 
       <div className="ml-auto flex items-center gap-2">
         <PdfOptionsPopover options={props.pdfOptions} onChange={props.onPdfOptionsChange} />
