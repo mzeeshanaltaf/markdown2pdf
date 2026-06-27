@@ -97,7 +97,7 @@ export const MARKDOWN_CSS = `
 .markdown-body table th { font-weight: 600; background: #f6f8fa; }
 .markdown-body table tr:nth-child(2n) { background: #f6f8fa; }
 
-.markdown-body img { max-width: 100%; box-sizing: border-box; }
+.markdown-body img { max-width: 100%; height: auto; box-sizing: border-box; }
 
 /* Inline code */
 .markdown-body code {

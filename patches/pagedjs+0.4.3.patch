@@ -1,0 +1,55 @@
+diff --git a/node_modules/pagedjs/dist/paged.esm.js b/node_modules/pagedjs/dist/paged.esm.js
+index c5851c9..ee4f3e5 100644
+--- a/node_modules/pagedjs/dist/paged.esm.js
++++ b/node_modules/pagedjs/dist/paged.esm.js
+@@ -630,6 +630,9 @@ function cloneNode(n, deep=false) {
+ }
+ 
+ function findElement(node, doc, forceQuery) {
++	if (!node || typeof node.getAttribute !== "function") {
++		return null;
++	}
+ 	const ref = node.getAttribute("data-ref");
+ 	return findRef(ref, doc, forceQuery);
+ }
+@@ -1765,6 +1768,9 @@ class Layout {
+ 						prevNode = prevNode.parentElement;
+ 					}
+ 					renderedNode = findElement(prevNode, rendered);
++					if (!renderedNode) {
++						return;
++					}
+ 					// Check if temp is the last rendered node at its level.
+ 					if (!temp.nextSibling) {
+ 						// We need to ensure that the previous sibling of temp is fully rendered.
+@@ -1795,6 +1801,9 @@ class Layout {
+ 				}
+ 
+ 				parent = findElement(renderedNode, source);
++				if (!parent) {
++					return;
++				}
+ 				index = indexOfTextNode(temp, parent);
+ 				// No seperatation for the first textNode of an element
+ 				if(index === 0) {
+@@ -1813,6 +1822,9 @@ class Layout {
+ 			}
+ 
+ 			parent = findElement(renderedNode, source);
++			if (!parent) {
++				return;
++			}
+ 			index = indexOfTextNode(container, parent);
+ 
+ 			if (index === -1) {
+@@ -2078,6 +2090,10 @@ class Layout {
+ 
+ 		let original = findElement(lastChild, source);
+ 
++		if (!original) {
++			return;
++		}
++
+ 		if (lastNodeIndex) {
+ 			original = original.childNodes[lastNodeIndex];
+ 		}

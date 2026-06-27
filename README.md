@@ -97,6 +97,7 @@ The app is fully static/client-side with no server routes or environment variabl
 
 - The converter is loaded via `next/dynamic({ ssr: false })` because it uses browser-only APIs (CodeMirror, Mermaid, Paged.js). This prevents a silent hydration mismatch that would break the UI.
 - One shared `MarkdownRenderer` component and one `MARKDOWN_CSS` string drive the live preview, the PDF, and the HTML export — all three are visually identical by construction.
+- Paged.js is patched via [`patch-package`](https://www.npmjs.com/package/patch-package) (`patches/pagedjs+0.4.3.patch`) to add null guards in its page-break logic, which otherwise crashes on certain documents (large tables, code blocks, or content ending at a page boundary). The patch re-applies automatically through the `postinstall` script — including on Vercel.
 
 ## License
 

@@ -13,6 +13,49 @@ function cleanup() {
 }
 
 /**
+ * Paged.js measures page boxes synchronously and crashes (null deref in
+ * `findEndToken` / `createBreakToken`) if content resizes *after* layout — which
+ * is exactly what happens when images load late or web fonts swap in. Settle
+ * everything to its final size first, and stamp intrinsic width/height onto each
+ * image so its box reserves the right space immediately (paired with the
+ * `height: auto` img rule, the aspect ratio is preserved when scaled down).
+ */
+async function settleContent(content: HTMLElement): Promise<void> {
+  const imgs = Array.from(content.querySelectorAll("img"));
+
+  await Promise.all(
+    imgs.map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          const finalize = () => {
+            if (img.naturalWidth && !img.getAttribute("width")) {
+              img.setAttribute("width", String(img.naturalWidth));
+              img.setAttribute("height", String(img.naturalHeight));
+            }
+            resolve();
+          };
+          if (img.complete) {
+            finalize();
+            return;
+          }
+          // Resolve regardless of outcome — a broken image must not hang export.
+          img.addEventListener("load", finalize, { once: true });
+          img.addEventListener("error", () => resolve(), { once: true });
+          window.setTimeout(resolve, 10_000);
+        })
+    )
+  );
+
+  if (document.fonts?.ready) {
+    try {
+      await document.fonts.ready;
+    } catch {
+      /* font loading is best-effort */
+    }
+  }
+}
+
+/**
  * Generate a PDF entirely in the browser.
  *
  * Paged.js paginates the rendered Markdown into real page boxes (applying the
@@ -41,6 +84,10 @@ export async function generatePdf(
 
   const content = document.createElement("div");
   content.innerHTML = sourceHtml;
+
+  // Wait for images + fonts to reach their final size before Paged.js paginates;
+  // a late resize during/after layout trips a null-deref bug in the library.
+  await settleContent(content);
 
   const css = [MARKDOWN_CSS, scopedThemeCss(themeId), buildPrintCss(options)].join("\n");
 
