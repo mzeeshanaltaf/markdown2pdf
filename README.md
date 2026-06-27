@@ -26,6 +26,7 @@ Most Markdown-to-PDF tools make you sign in or cap how many files you can conver
 | **PDF Export** | Paginated via Paged.js + browser engine; vector, selectable text |
 | **HTML Export** | Self-contained single `.html` file — works offline, no CDN links |
 | **PDF Options** | Page size, orientation, margins, page numbers, header/footer |
+| **Contact / Feedback** | `/contact` form → n8n webhook, with honeypot + Upstash rate limiting |
 
 ## Privacy Guarantee
 
@@ -63,6 +64,7 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or go 
 - **Diagrams:** Mermaid.js
 - **PDF:** Paged.js + `window.print()`
 - **Animations:** Motion (`motion/react`)
+- **Contact form:** Next.js route handler → n8n webhook, rate-limited with Upstash Redis (`@upstash/ratelimit`)
 - **Deploy:** Vercel
 
 ## Project Structure
@@ -71,11 +73,14 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or go 
 app/
   page.tsx          # Landing page
   app/page.tsx      # Converter route (ssr: false wrapper)
+  contact/page.tsx  # Contact / feedback page (server component)
+  api/contact/      # Route handler: validate → honeypot → rate limit → n8n webhook
   globals.css       # Tailwind base + print isolation CSS
 
 components/
   converter/        # Editor, preview, toolbar, PDF options
   landing/          # Hero, features, privacy, how-it-works, FAQ, footer
+  contact/          # Progressive-enhancement contact form
   ui/               # shadcn/Base UI primitives
 
 lib/
@@ -86,12 +91,24 @@ lib/
   highlight-themes.ts   # 8 bundled syntax themes
   scroll-sync.ts        # Bi-directional editor ↔ preview sync
   storage.ts            # localStorage autosave
+  rate-limit.ts         # Upstash Redis sliding-window limiter (contact form)
   sample.ts             # Sample Markdown document
 ```
 
 ## Deploying
 
-The app is fully static/client-side with no server routes or environment variables. Connect this repo to [Vercel](https://vercel.com) and it deploys with zero configuration.
+The converter itself is fully static/client-side — your document never touches a server. Connect this repo to [Vercel](https://vercel.com) and it deploys with near-zero configuration.
+
+The only server-side feature is the **contact / feedback form**, which needs these environment variables (set them in the Vercel project settings, or a local `.env`):
+
+```bash
+N8N_CONTACT_WEBHOOK_URL=   # n8n webhook the form posts to
+N8N_API_KEY=               # sent as the x-api-key header
+UPSTASH_REDIS_REST_URL=    # Upstash Redis REST URL (rate limiting)
+UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis REST token
+```
+
+If the Upstash variables are absent, rate limiting fails open (submissions are still allowed); if the n8n variables are absent, the form returns a configuration error.
 
 ## Architecture Notes
 

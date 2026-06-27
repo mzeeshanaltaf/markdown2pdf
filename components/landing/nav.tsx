@@ -25,6 +25,9 @@ export function Nav() {
           <a href="#faq" className="transition-colors hover:text-zinc-100">
             FAQ
           </a>
+          <Link href="/contact" className="transition-colors hover:text-zinc-100">
+            Contact
+          </Link>
         </div>
 
         <Link

@@ -21,6 +21,9 @@ export function Footer() {
           <a href="#faq" className="transition-colors hover:text-zinc-200">
             FAQ
           </a>
+          <Link href="/contact" className="transition-colors hover:text-zinc-200">
+            Contact
+          </Link>
           <Link href="/app" className="transition-colors hover:text-zinc-200">
             Open the app
           </Link>

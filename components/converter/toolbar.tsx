@@ -14,6 +14,7 @@ import {
   Sun,
   Moon,
   Loader2,
+  MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -189,6 +190,22 @@ export function Toolbar(props: ToolbarProps) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="Contact & feedback"
+                render={<Link href="/contact" />}
+              />
+            }
+          >
+            <MessageSquare className="size-4" />
+          </TooltipTrigger>
+          <TooltipContent>Contact &amp; feedback</TooltipContent>
+        </Tooltip>
 
         <Tooltip>
           <TooltipTrigger
