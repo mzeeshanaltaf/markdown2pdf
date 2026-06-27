@@ -12,12 +12,12 @@ export function Footer() {
         </div>
 
         <nav className="flex items-center gap-6">
-          <a href="/#features" className="transition-colors hover:text-zinc-200">
+          <Link href="/#features" className="transition-colors hover:text-zinc-200">
             Features
-          </a>
-          <a href="/#faq" className="transition-colors hover:text-zinc-200">
+          </Link>
+          <Link href="/#faq" className="transition-colors hover:text-zinc-200">
             FAQ
-          </a>
+          </Link>
           <Link href="/contact" className="transition-colors hover:text-zinc-200">
             Contact
           </Link>

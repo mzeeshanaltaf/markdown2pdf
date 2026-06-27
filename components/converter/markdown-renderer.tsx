@@ -41,7 +41,7 @@ export const MarkdownRenderer = forwardRef<HTMLDivElement, { source: string }>(
           components={{
             // Intercept ```mermaid blocks and render them as inline SVG instead
             // of a normal highlighted code block.
-            pre({ node, children, ...rest }) {
+            pre({ children, ...rest }) {
               const codeEl = Array.isArray(children) ? children[0] : children;
               const className =
                 (isValidElement(codeEl) &&

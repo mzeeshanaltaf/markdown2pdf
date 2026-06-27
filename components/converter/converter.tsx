@@ -155,7 +155,7 @@ export default function Converter() {
         ))}
       </div>
 
-      <div className="grid min-h-0 flex-1 md:grid-cols-2">
+      <main className="grid min-h-0 flex-1 md:grid-cols-2">
         {/* Editor */}
         <section
           className={`min-h-0 overflow-hidden border-r ${
@@ -190,7 +190,7 @@ export default function Converter() {
             )}
           </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }

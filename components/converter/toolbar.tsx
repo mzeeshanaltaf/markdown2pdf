@@ -147,7 +147,7 @@ export function Toolbar(props: ToolbarProps) {
             value={props.syntaxTheme}
             onValueChange={(v) => v && props.onSyntaxThemeChange(v)}
           >
-            <SelectTrigger size="sm" className="w-[150px]">
+            <SelectTrigger size="sm" className="w-[150px]" aria-label="Code syntax highlighting theme">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

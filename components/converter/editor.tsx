@@ -22,6 +22,7 @@ export function Editor({ value, onChange, onViewReady, dark }: EditorProps) {
     () => [
       markdown({ base: markdownLanguage, codeLanguages: languages }),
       EditorView.lineWrapping,
+      EditorView.contentAttributes.of({ "aria-label": "Markdown editor" }),
     ],
     []
   );

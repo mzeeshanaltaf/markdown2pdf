@@ -55,7 +55,7 @@ export function PdfOptionsPopover({
               value={options.pageSize}
               onValueChange={(v) => v && set("pageSize", v as PageSize)}
             >
-              <SelectTrigger size="sm" className="w-full">
+              <SelectTrigger size="sm" className="w-full" aria-label="Page size">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -72,7 +72,7 @@ export function PdfOptionsPopover({
               value={options.orientation}
               onValueChange={(v) => v && set("orientation", v as Orientation)}
             >
-              <SelectTrigger size="sm" className="w-full">
+              <SelectTrigger size="sm" className="w-full" aria-label="Orientation">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -90,7 +90,7 @@ export function PdfOptionsPopover({
               value={options.marginPreset}
               onValueChange={(v) => v && set("marginPreset", v as MarginPreset)}
             >
-              <SelectTrigger size="sm" className="w-full">
+              <SelectTrigger size="sm" className="w-full" aria-label="Margins">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -110,6 +110,7 @@ export function PdfOptionsPopover({
                   onChange={(e) =>
                     set("customMarginMm", Number(e.target.value) || 0)
                   }
+                  aria-label="Custom margin in millimeters"
                   className="h-8 w-16"
                 />
                 <span className="text-xs text-muted-foreground">mm</span>
