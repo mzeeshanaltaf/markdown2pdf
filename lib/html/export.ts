@@ -74,13 +74,18 @@ function safeFileName(name: string): string {
  * Export the rendered Markdown as a standalone .html file via a one-click Blob
  * download. No print dialog, no network — the file opens correctly offline.
  */
-export function exportHtml(bodyHtml: string, themeId: string, title: string): void {
+export function exportHtml(
+  bodyHtml: string,
+  themeId: string,
+  title: string,
+  fileName: string
+): void {
   const html = buildStandaloneHtml(bodyHtml, themeId, title || "Document");
   const blob = new Blob([html], { type: "text/html;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${safeFileName(title)}.html`;
+  a.download = `${safeFileName(fileName)}.html`;
   document.body.appendChild(a);
   a.click();
   a.remove();

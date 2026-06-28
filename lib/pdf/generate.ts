@@ -4,6 +4,12 @@ import { buildPrintCss, type PdfOptions } from "./print-styles";
 
 const PRINT_ROOT_ID = "pdf-print-root";
 
+/** Sanitise a file base name for use as the print dialog's default filename. */
+function safePrintTitle(name: string): string {
+  const base = name.trim().replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, " ");
+  return (base || "document").slice(0, 80);
+}
+
 /** Remove anything left over from a previous PDF generation. */
 function cleanup() {
   document.getElementById(PRINT_ROOT_ID)?.remove();
@@ -69,7 +75,8 @@ async function settleContent(content: HTMLElement): Promise<void> {
 export async function generatePdf(
   sourceHtml: string,
   themeId: string,
-  options: PdfOptions
+  options: PdfOptions,
+  fileName: string
 ): Promise<void> {
   cleanup();
 
@@ -107,10 +114,16 @@ export async function generatePdf(
   // Print on the next frame so the paginated DOM is fully laid out, then tidy up.
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
+  // Browsers seed the "Save as PDF" filename from document.title. Swap in the
+  // source file's name for the print dialog, then restore the page title.
+  const previousTitle = document.title;
+  document.title = safePrintTitle(fileName);
+
   let fallbackTimer = 0;
   const done = () => {
     window.removeEventListener("afterprint", done);
     window.clearTimeout(fallbackTimer);
+    document.title = previousTitle;
     cleanup();
   };
   window.addEventListener("afterprint", done);

@@ -97,13 +97,13 @@ export default function Converter() {
     }
     setExporting(true);
     try {
-      await generatePdf(bodyRef.current.innerHTML, syntaxTheme, pdfOptions);
+      await generatePdf(bodyRef.current.innerHTML, syntaxTheme, pdfOptions, fileTitle);
     } catch {
       toast.error("PDF generation failed. Please try again.");
     } finally {
       setExporting(false);
     }
-  }, [source, syntaxTheme, pdfOptions]);
+  }, [source, syntaxTheme, pdfOptions, fileTitle]);
 
   const handleDownloadHtml = useCallback(() => {
     if (exporting) return;
@@ -112,12 +112,12 @@ export default function Converter() {
       return;
     }
     try {
-      exportHtml(bodyRef.current.innerHTML, syntaxTheme, title);
+      exportHtml(bodyRef.current.innerHTML, syntaxTheme, title, fileTitle);
       toast.success("HTML downloaded");
     } catch {
       toast.error("HTML export failed. Please try again.");
     }
-  }, [exporting, source, syntaxTheme, title]);
+  }, [exporting, source, syntaxTheme, title, fileTitle]);
 
   return (
     <div className="flex h-[100dvh] flex-col">
