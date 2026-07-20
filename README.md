@@ -34,7 +34,7 @@ Open DevTools → Network while you convert and download. You will see zero requ
 - **PDF** — [Paged.js](https://pagedjs.org/) paginates your document in the browser, then `window.print()` hands it to the browser's own Save-as-PDF. Vector output, selectable text, crisp math and diagrams — all on-device.
 - **HTML** — All CSS (typography, syntax theme, KaTeX via MathML), and pre-rendered Mermaid SVGs are inlined into a single `Blob`. One-click download, no print dialog, fully offline.
 
-The only telemetry is [Vercel Web Analytics](https://vercel.com/docs/analytics/privacy-policy) — cookie-free, no personal data, no cross-site tracking. It records aggregate page views, never the content you convert. See the [Privacy Policy](https://markdown2pdf.zeeshanai.cloud/privacy) for the full breakdown.
+The only telemetry is [Umami](https://umami.is) — a privacy-first, self-hosted, cookie-free analytics tool with no personal data and no cross-site tracking. It records aggregate page views, never the content you convert. See the [Privacy Policy](https://markdown2pdf.zeeshanai.cloud/privacy) for the full breakdown.
 
 ## Getting Started
 
@@ -66,8 +66,8 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or go 
 - **PDF:** Paged.js + `window.print()`
 - **Animations:** Motion (`motion/react`)
 - **Contact form:** Next.js route handler → n8n webhook, rate-limited with Upstash Redis (`@upstash/ratelimit`)
-- **Analytics:** Vercel Web Analytics (`@vercel/analytics`) — cookie-free, privacy-friendly
-- **Deploy:** Vercel
+- **Analytics:** Umami (self-hosted) — cookie-free, privacy-friendly
+- **Deploy:** Self-hosted VPS via Coolify
 
 ## Project Structure
 
@@ -106,15 +106,22 @@ lib/
 
 ## Deploying
 
-The converter itself is fully static/client-side — your document never touches a server. Connect this repo to [Vercel](https://vercel.com) and it deploys with near-zero configuration.
+The converter itself is fully static/client-side — your document never touches a server. It is deployed to a self-hosted VPS via [Coolify](https://coolify.io), which builds the repo on push.
 
-The only server-side feature is the **contact / feedback form**, which needs these environment variables (set them in the Vercel project settings, or a local `.env`):
+The only server-side feature is the **contact / feedback form**, which needs these environment variables (set them in the Coolify application settings, or a local `.env`):
 
 ```bash
 N8N_CONTACT_WEBHOOK_URL=   # n8n webhook the form posts to
 N8N_API_KEY=               # sent as the x-api-key header
 UPSTASH_REDIS_REST_URL=    # Upstash Redis REST URL (rate limiting)
 UPSTASH_REDIS_REST_TOKEN=  # Upstash Redis REST token
+```
+
+Analytics uses [Umami](https://umami.is). Both variables are `NEXT_PUBLIC_*`, so they must be present **at build time** (in Coolify, mark them build-time):
+
+```bash
+NEXT_PUBLIC_UMAMI_SCRIPT_URL=   # e.g. https://analytics.example.com/script.js
+NEXT_PUBLIC_UMAMI_WEBSITE_ID=   # the site UUID from your Umami dashboard
 ```
 
 If the Upstash variables are absent, rate limiting fails open (submissions are still allowed); if the n8n variables are absent, the form returns a configuration error.
@@ -131,7 +138,7 @@ If unset, it falls back to the production domain. See [`.env.example`](.env.exam
 
 - The converter is loaded via `next/dynamic({ ssr: false })` because it uses browser-only APIs (CodeMirror, Mermaid, Paged.js). This prevents a silent hydration mismatch that would break the UI.
 - One shared `MarkdownRenderer` component and one `MARKDOWN_CSS` string drive the live preview, the PDF, and the HTML export — all three are visually identical by construction.
-- Paged.js is patched via [`patch-package`](https://www.npmjs.com/package/patch-package) (`patches/pagedjs+0.4.3.patch`) to add null guards in its page-break logic, which otherwise crashes on certain documents (large tables, code blocks, or content ending at a page boundary). The patch re-applies automatically through the `postinstall` script — including on Vercel.
+- Paged.js is patched via [`patch-package`](https://www.npmjs.com/package/patch-package) (`patches/pagedjs+0.4.3.patch`) to add null guards in its page-break logic, which otherwise crashes on certain documents (large tables, code blocks, or content ending at a page boundary). The patch re-applies automatically through the `postinstall` script during the build.
 
 ## License
 

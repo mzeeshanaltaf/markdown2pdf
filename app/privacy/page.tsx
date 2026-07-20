@@ -70,19 +70,21 @@ export default function PrivacyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-zinc-100">Analytics</h2>
             <p>
-              We use Vercel Web Analytics to understand aggregate, anonymous usage
-              of the site — for example, how many people visit a page. Vercel
-              Analytics is privacy-friendly: it does not use cookies and does not
-              collect personally identifiable information or track you across other
-              sites. It tells us page views and high-level visitor counts, nothing
-              about the content you convert. You can read more in{" "}
+              We use Umami, a privacy-first, self-hosted analytics tool, to
+              understand aggregate, anonymous usage of the site — for example, how
+              many people visit a page. Umami is cookieless: it does not use
+              cookies and does not collect personally identifiable information or
+              track you across other sites. The data is stored on our own server,
+              not shared with a third-party advertising network. It tells us page
+              views and high-level visitor counts, nothing about the content you
+              convert. You can read more in{" "}
               <a
-                href="https://vercel.com/docs/analytics/privacy-policy"
+                href="https://umami.is/docs/faq"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-emerald-400 underline-offset-4 hover:underline"
               >
-                Vercel&apos;s analytics privacy documentation
+                Umami&apos;s documentation
               </a>
               .
             </p>
@@ -113,10 +115,11 @@ export default function PrivacyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-zinc-100">Hosting</h2>
             <p>
-              The site is hosted on Vercel. As with any web host, Vercel may process
-              standard technical request data (such as IP address and browser type)
-              to serve and secure the site. This is inherent to how the web works
-              and is not used by us to identify you.
+              The site is hosted on our own server (a self-managed VPS). As with
+              any web host, the server may process standard technical request data
+              (such as IP address and browser type) to serve and secure the site.
+              This is inherent to how the web works and is not used by us to
+              identify you.
             </p>
           </section>
 
